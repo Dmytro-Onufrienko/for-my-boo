@@ -61,7 +61,7 @@ export default function TomRiddleDiary() {
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(25)].map((_, i) => (
           <div
-            key={i}
+            key={`green-${i}`}
             className="absolute rounded-full bg-emerald-500 opacity-5 animate-pulse"
             style={{
               left: `${Math.random() * 100}%`,
@@ -73,16 +73,31 @@ export default function TomRiddleDiary() {
             }}
           />
         ))}
+        {/* Red magical particles - fewer and smaller */}
+        {[...Array(15)].map((_, i) => (
+          <div
+            key={`red-${i}`}
+            className="absolute rounded-full bg-rose-600 opacity-10 animate-pulse"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              width: `${2 + Math.random() * 4}px`,
+              height: `${2 + Math.random() * 4}px`,
+              animationDelay: `${Math.random() * 5}s`,
+              animationDuration: `${4 + Math.random() * 5}s`
+            }}
+          />
+        ))}
       </div>
 
-      <div className="relative w-full max-w-4xl perspective-1000">
+      <div className="relative w-full max-w-[550px] h-[800px] perspective-1000">
         {/* Book with 3D effect */}
-        <div className="relative transform-gpu" style={{ transform: 'rotateY(-2deg) rotateX(2deg)' }}>
+        <div className="relative w-full h-full transform-gpu" style={{ transform: 'rotateY(-2deg) rotateX(2deg)' }}>
           {/* Deep shadow under book */}
           <div className="absolute inset-0 bg-black opacity-70 blur-3xl transform translate-y-8 scale-95"></div>
 
           {/* Book cover - dark leather with metal corners */}
-          <div className="relative bg-gradient-to-br from-slate-800 via-slate-900 to-black rounded-sm shadow-2xl border border-gray-900 overflow-hidden">
+          <div className="relative w-full h-full bg-gradient-to-br from-slate-800 via-slate-900 to-black rounded-sm shadow-2xl border border-gray-900 overflow-hidden flex flex-col">
             {/* Leather texture overlay */}
             <div className="absolute inset-0 opacity-40" style={{
               backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E")`,
@@ -106,7 +121,7 @@ export default function TomRiddleDiary() {
               ))}
             </div>
 
-            <div className="p-6 md:p-10">
+            <div className="p-6 md:p-8 h-full flex flex-col">
               {/* Metal corner decorations - ornate style */}
               {/* Top Left Corner */}
               <div className="absolute top-0 left-0 w-20 h-20 opacity-70">
@@ -173,7 +188,7 @@ export default function TomRiddleDiary() {
 
 
               {/* Open pages - old yellowed paper */}
-              <div className="relative bg-gradient-to-br from-amber-100 via-yellow-50 to-amber-200 min-h-[500px] shadow-2xl overflow-hidden" style={{
+              <div className="relative flex-grow bg-gradient-to-br from-amber-100 via-yellow-50 to-amber-200 shadow-2xl overflow-hidden flex flex-col" style={{
                 boxShadow: 'inset 0 0 60px rgba(0,0,0,0.15), inset 20px 0 40px rgba(0,0,0,0.1)'
               }}>
                 {/* Aged paper texture */}
@@ -219,9 +234,9 @@ export default function TomRiddleDiary() {
                 <div className="absolute top-40 right-16 w-4 h-4 bg-slate-800 rounded-full opacity-25 blur-sm"></div>
 
                 {/* Content area */}
-                <div className="relative p-12 md:p-16 min-h-[500px]">
+                <div className="relative p-8 md:p-12 flex-grow flex flex-col justify-center items-center text-center">
                   {!message && !showNotFound && !isWriting && (
-                    <div className="space-y-8">
+                    <div className="w-full space-y-8">
                       <div className="space-y-3">
                         <p className="text-gray-700 text-base font-serif italic mb-4 opacity-70">
                           Напиши щось у щоденник...
@@ -247,7 +262,7 @@ export default function TomRiddleDiary() {
                   )}
 
                   {isWriting && (
-                    <div className="min-h-[350px] flex items-start justify-start pt-8">
+                    <div className="w-full h-full flex items-center justify-center">
                       <p
                         className="text-gray-900 text-xl leading-loose whitespace-pre-wrap"
                         style={{
@@ -262,8 +277,8 @@ export default function TomRiddleDiary() {
                   )}
 
                   {message && !isWriting && (
-                    <div className="space-y-8 animate-fade-in pt-8">
-                      <div className="min-h-[300px]">
+                    <div className="w-full h-full flex flex-col items-center justify-center space-y-8 animate-fade-in">
+                      <div className="w-full">
                         <p
                           className="text-gray-900 text-xl leading-loose mb-12"
                           style={{
@@ -284,8 +299,8 @@ export default function TomRiddleDiary() {
                   )}
 
                   {showNotFound && (
-                    <div className="space-y-8 animate-fade-in pt-8">
-                      <div className="min-h-[300px] flex flex-col justify-center">
+                    <div className="w-full h-full flex flex-col items-center justify-center space-y-8 animate-fade-in">
+                      <div className="w-full flex flex-col justify-center">
                         <p
                           className="text-gray-800 text-xxl leading-loose italic mb-8"
                           style={{
