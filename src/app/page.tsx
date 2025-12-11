@@ -144,24 +144,24 @@ export default function TomRiddleDiary() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Dark atmospheric background (Now slate-900/blueish to match old cover) */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-black opacity-90"></div>
+    <div className="min-h-screen bg-black flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Dark atmospheric background (Reverted for particle visibility) */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-black to-gray-900"></div>
 
       {/* Particles Layer */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Green Particles */}
         {greenParticles.map((p) => (
           <div
-            key={`green - ${p.id} `}
+            key={`green-${p.id}`}
             className="absolute rounded-full bg-emerald-500 opacity-5 animate-pulse"
             style={{
-              left: `${p.left}% `,
-              top: `${p.top}% `,
-              width: `${p.width} px`,
-              height: `${p.height} px`,
-              animationDelay: `${p.delay} s`,
-              animationDuration: `${p.duration} s`
+              left: `${p.left}%`,
+              top: `${p.top}%`,
+              width: `${p.width}px`,
+              height: `${p.height}px`,
+              animationDelay: `${p.delay}s`,
+              animationDuration: `${p.duration}s`
             }}
           />
         ))}
@@ -169,15 +169,15 @@ export default function TomRiddleDiary() {
         {/* Purple Particles (Priority) */}
         {purpleParticles.map((p) => (
           <div
-            key={`purple - ${p.id} `}
+            key={`purple-${p.id}`}
             className="absolute rounded-full bg-violet-600 opacity-15 animate-pulse"
             style={{
-              left: `${p.left}% `,
-              top: `${p.top}% `,
-              width: `${p.width} px`,
-              height: `${p.height} px`,
-              animationDelay: `${p.delay} s`,
-              animationDuration: `${p.duration} s`
+              left: `${p.left}%`,
+              top: `${p.top}%`,
+              width: `${p.width}px`,
+              height: `${p.height}px`,
+              animationDelay: `${p.delay}s`,
+              animationDuration: `${p.duration}s`
             }}
           />
         ))}
@@ -185,15 +185,15 @@ export default function TomRiddleDiary() {
         {/* Red Particles (Secondary) */}
         {redParticles.map((p) => (
           <div
-            key={`red - ${p.id} `}
+            key={`red-${p.id}`}
             className="absolute rounded-full bg-rose-600 opacity-10 animate-pulse"
             style={{
-              left: `${p.left}% `,
-              top: `${p.top}% `,
-              width: `${p.width} px`,
-              height: `${p.height} px`,
-              animationDelay: `${p.delay} s`,
-              animationDuration: `${p.duration} s`
+              left: `${p.left}%`,
+              top: `${p.top}%`,
+              width: `${p.width}px`,
+              height: `${p.height}px`,
+              animationDelay: `${p.delay}s`,
+              animationDuration: `${p.duration}s`
             }}
           />
         ))}
@@ -201,15 +201,15 @@ export default function TomRiddleDiary() {
         {/* Marble Particles (New) */}
         {marbleParticles.map((p) => (
           <div
-            key={`marble - ${p.id} `}
+            key={`marble-${p.id}`}
             className="absolute rounded-full bg-slate-200 opacity-10 animate-pulse"
             style={{
-              left: `${p.left}% `,
-              top: `${p.top}% `,
-              width: `${p.width} px`,
-              height: `${p.height} px`,
-              animationDelay: `${p.delay} s`,
-              animationDuration: `${p.duration} s`
+              left: `${p.left}%`,
+              top: `${p.top}%`,
+              width: `${p.width}px`,
+              height: `${p.height}px`,
+              animationDelay: `${p.delay}s`,
+              animationDuration: `${p.duration}s`
             }}
           />
         ))}
@@ -217,15 +217,15 @@ export default function TomRiddleDiary() {
         {/* Turquoise Particles (New) */}
         {turquoiseParticles.map((p) => (
           <div
-            key={`turquoise - ${p.id} `}
+            key={`turquoise-${p.id}`}
             className="absolute rounded-full bg-teal-500 opacity-10 animate-pulse"
             style={{
-              left: `${p.left}% `,
-              top: `${p.top}% `,
-              width: `${p.width} px`,
-              height: `${p.height} px`,
-              animationDelay: `${p.delay} s`,
-              animationDuration: `${p.duration} s`
+              left: `${p.left}%`,
+              top: `${p.top}%`,
+              width: `${p.width}px`,
+              height: `${p.height}px`,
+              animationDelay: `${p.delay}s`,
+              animationDuration: `${p.duration}s`
             }}
           />
         ))}
@@ -261,12 +261,15 @@ export default function TomRiddleDiary() {
           {/* Deep shadow under book */}
           <div className="absolute inset-0 bg-black opacity-70 blur-3xl transform translate-y-8 scale-95"></div>
 
-          {/* Book cover - NOW BLACK to match old background */}
-          <div className="relative w-full h-full bg-black rounded-sm shadow-2xl border border-gray-900 overflow-hidden flex flex-col">
-            {/* Leather texture overlay */}
-            <div className="absolute inset-0 opacity-40" style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E")`,
-              mixBlendMode: 'overlay'
+          {/* Book cover - NOW BLACK with White Glow Shadow */}
+          <div className="relative w-full h-full bg-black rounded-sm border border-gray-900 overflow-hidden flex flex-col" style={{
+            boxShadow: '0 0 15px rgba(255, 255, 255, 0.1), 0 0 30px rgba(255, 255, 255, 0.05)'
+          }}>
+            {/* Leather texture overlay - Improved for leather look */}
+            <div className="absolute inset-0 opacity-60" style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='leather'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.45' numOctaves='3' result='noise'/%3E%3CfeDiffuseLighting in='noise' lighting-color='%23333333' surfaceScale='2'%3E%3CfeDistantLight azimuth='45' elevation='60'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23leather)' opacity='0.5'/%3E%3C/svg%3E")`,
+              mixBlendMode: 'overlay',
+              filter: 'contrast(1.2)'
             }}></div>
 
             {/* Subtle Gradient for depth (Dark gray to black) */}
