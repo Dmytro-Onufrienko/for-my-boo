@@ -1,6 +1,6 @@
 "use client"
 
-import React, { FormEvent, MouseEvent, useState, KeyboardEvent, useEffect } from 'react';
+import React, { FormEvent, MouseEvent, useState, KeyboardEvent, useEffect, useRef } from 'react';
 
 interface Particle {
   id: number;
@@ -31,65 +31,75 @@ interface AgingSpot {
 export default function TomRiddleDiary() {
   const [code, setCode] = useState('');
   const [message, setMessage] = useState('');
-  const [isWriting, setIsWriting] = useState(false);
   const [showNotFound, setShowNotFound] = useState(false);
-  const [inkText, setInkText] = useState('');
 
   // Visual state to prevent re-renders on every keystroke
   const [greenParticles, setGreenParticles] = useState<Particle[]>([]);
   const [redParticles, setRedParticles] = useState<Particle[]>([]);
   const [purpleParticles, setPurpleParticles] = useState<Particle[]>([]);
-  const [marbleParticles, setMarbleParticles] = useState<Particle[]>([]); // New marble particles
+  const [marbleParticles, setMarbleParticles] = useState<Particle[]>([]);
+  const [turquoiseParticles, setTurquoiseParticles] = useState<Particle[]>([]); // New turquoise particles
   const [scratches, setScratches] = useState<Scratch[]>([]);
   const [agingSpots, setAgingSpots] = useState<AgingSpot[]>([]);
 
   useEffect(() => {
-    // Generate Green Particles
-    setGreenParticles([...Array(25)].map((_, i) => ({
+    // Generate Green Particles (Reduced count, smaller size)
+    setGreenParticles([...Array(10)].map((_, i) => ({
       id: i,
       left: Math.random() * 100,
       top: Math.random() * 100,
-      width: 3 + Math.random() * 6,
-      height: 3 + Math.random() * 6,
+      width: 2 + Math.random() * 3, // Smaller size (was 3-9)
+      height: 2 + Math.random() * 3,
       delay: Math.random() * 4,
       duration: 3 + Math.random() * 4
     })));
 
-    // Generate Purple Particles (Now Priority: Larger and more than red)
-    setPurpleParticles([...Array(20)].map((_, i) => ({
+    // Generate Purple Particles (Priority: Still largest relative count, but smaller absolute count)
+    setPurpleParticles([...Array(15)].map((_, i) => ({
       id: i,
       left: Math.random() * 100,
       top: Math.random() * 100,
-      width: 2 + Math.random() * 5,
-      height: 2 + Math.random() * 5,
+      width: 2 + Math.random() * 3, // Normalized size
+      height: 2 + Math.random() * 3,
       delay: Math.random() * 5,
       duration: 4 + Math.random() * 5
     })));
 
-    // Generate Red Particles (Now Secondary: Smaller and fewer)
-    setRedParticles([...Array(10)].map((_, i) => ({
+    // Generate Red Particles (Reduced count)
+    setRedParticles([...Array(5)].map((_, i) => ({
       id: i,
       left: Math.random() * 100,
       top: Math.random() * 100,
-      width: 2 + Math.random() * 3,
+      width: 2 + Math.random() * 3, // Normalized size
       height: 2 + Math.random() * 3,
       delay: Math.random() * 6,
       duration: 5 + Math.random() * 6
     })));
 
-    // Generate Marble Particles (New: Very small, white/silver)
-    setMarbleParticles([...Array(15)].map((_, i) => ({
+    // Generate Marble Particles (Increased size, reduced count)
+    setMarbleParticles([...Array(8)].map((_, i) => ({
       id: i,
       left: Math.random() * 100,
       top: Math.random() * 100,
-      width: 1 + Math.random() * 3,
-      height: 1 + Math.random() * 3,
+      width: 2 + Math.random() * 3, // Increased from 1-4 to match others
+      height: 2 + Math.random() * 3,
       delay: Math.random() * 3,
       duration: 2 + Math.random() * 4
     })));
 
+    // Generate Turquoise Particles (New: similar count/size to others)
+    setTurquoiseParticles([...Array(8)].map((_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      width: 2 + Math.random() * 3,
+      height: 2 + Math.random() * 3,
+      delay: Math.random() * 4,
+      duration: 3 + Math.random() * 5
+    })));
+
     // Generate Scratches
-    setScratches([...Array(8)].map((_, i) => ({
+    setScratches([...Array(6)].map((_, i) => ({
       id: i,
       left: 20 + Math.random() * 60,
       top: 20 + Math.random() * 60,
@@ -98,7 +108,7 @@ export default function TomRiddleDiary() {
     })));
 
     // Generate Aging Spots
-    setAgingSpots([...Array(25)].map((_, i) => ({
+    setAgingSpots([...Array(15)].map((_, i) => ({
       id: i,
       left: 10 + Math.random() * 80,
       top: 10 + Math.random() * 80,
@@ -119,56 +129,39 @@ export default function TomRiddleDiary() {
     const foundMessage = messages[code.toUpperCase()];
 
     if (foundMessage) {
-      setIsWriting(true);
       setShowNotFound(false);
-      setInkText('');
-
-      let i = 0;
-      const interval = setInterval(() => {
-        if (i < foundMessage.length) {
-          setInkText(foundMessage.substring(0, i + 1));
-          i++;
-        } else {
-          clearInterval(interval);
-          setMessage(foundMessage);
-          setIsWriting(false);
-        }
-      }, 100); // Speed increased from 150ms to 100ms
+      setMessage(foundMessage);
     } else {
       setShowNotFound(true);
-      setIsWriting(false);
       setMessage('');
-      setInkText('');
     }
   };
 
   const reset = () => {
     setCode('');
     setMessage('');
-    setIsWriting(false);
     setShowNotFound(false);
-    setInkText('');
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Dark atmospheric background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-black to-gray-900"></div>
+    <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Dark atmospheric background (Now slate-900/blueish to match old cover) */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-black opacity-90"></div>
 
       {/* Particles Layer */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Green Particles */}
         {greenParticles.map((p) => (
           <div
-            key={`green-${p.id}`}
+            key={`green - ${p.id} `}
             className="absolute rounded-full bg-emerald-500 opacity-5 animate-pulse"
             style={{
-              left: `${p.left}%`,
-              top: `${p.top}%`,
-              width: `${p.width}px`,
-              height: `${p.height}px`,
-              animationDelay: `${p.delay}s`,
-              animationDuration: `${p.duration}s`
+              left: `${p.left}% `,
+              top: `${p.top}% `,
+              width: `${p.width} px`,
+              height: `${p.height} px`,
+              animationDelay: `${p.delay} s`,
+              animationDuration: `${p.duration} s`
             }}
           />
         ))}
@@ -176,15 +169,15 @@ export default function TomRiddleDiary() {
         {/* Purple Particles (Priority) */}
         {purpleParticles.map((p) => (
           <div
-            key={`purple-${p.id}`}
+            key={`purple - ${p.id} `}
             className="absolute rounded-full bg-violet-600 opacity-15 animate-pulse"
             style={{
-              left: `${p.left}%`,
-              top: `${p.top}%`,
-              width: `${p.width}px`,
-              height: `${p.height}px`,
-              animationDelay: `${p.delay}s`,
-              animationDuration: `${p.duration}s`
+              left: `${p.left}% `,
+              top: `${p.top}% `,
+              width: `${p.width} px`,
+              height: `${p.height} px`,
+              animationDelay: `${p.delay} s`,
+              animationDuration: `${p.duration} s`
             }}
           />
         ))}
@@ -192,15 +185,15 @@ export default function TomRiddleDiary() {
         {/* Red Particles (Secondary) */}
         {redParticles.map((p) => (
           <div
-            key={`red-${p.id}`}
+            key={`red - ${p.id} `}
             className="absolute rounded-full bg-rose-600 opacity-10 animate-pulse"
             style={{
-              left: `${p.left}%`,
-              top: `${p.top}%`,
-              width: `${p.width}px`,
-              height: `${p.height}px`,
-              animationDelay: `${p.delay}s`,
-              animationDuration: `${p.duration}s`
+              left: `${p.left}% `,
+              top: `${p.top}% `,
+              width: `${p.width} px`,
+              height: `${p.height} px`,
+              animationDelay: `${p.delay} s`,
+              animationDuration: `${p.duration} s`
             }}
           />
         ))}
@@ -208,15 +201,31 @@ export default function TomRiddleDiary() {
         {/* Marble Particles (New) */}
         {marbleParticles.map((p) => (
           <div
-            key={`marble-${p.id}`}
+            key={`marble - ${p.id} `}
             className="absolute rounded-full bg-slate-200 opacity-10 animate-pulse"
             style={{
-              left: `${p.left}%`,
-              top: `${p.top}%`,
-              width: `${p.width}px`,
-              height: `${p.height}px`,
-              animationDelay: `${p.delay}s`,
-              animationDuration: `${p.duration}s`
+              left: `${p.left}% `,
+              top: `${p.top}% `,
+              width: `${p.width} px`,
+              height: `${p.height} px`,
+              animationDelay: `${p.delay} s`,
+              animationDuration: `${p.duration} s`
+            }}
+          />
+        ))}
+
+        {/* Turquoise Particles (New) */}
+        {turquoiseParticles.map((p) => (
+          <div
+            key={`turquoise - ${p.id} `}
+            className="absolute rounded-full bg-teal-500 opacity-10 animate-pulse"
+            style={{
+              left: `${p.left}% `,
+              top: `${p.top}% `,
+              width: `${p.width} px`,
+              height: `${p.height} px`,
+              animationDelay: `${p.delay} s`,
+              animationDuration: `${p.duration} s`
             }}
           />
         ))}
@@ -224,7 +233,7 @@ export default function TomRiddleDiary() {
 
       {/* Mobile/Small Screen Optimized Message */}
       <div className="md:hidden relative w-full h-[90vh] flex flex-col items-center justify-center z-20">
-        <div className="relative bg-gradient-to-br from-slate-800 via-slate-900 to-black rounded-sm shadow-2xl border border-gray-900 overflow-hidden w-full max-w-sm p-8 text-center bg-opacity-90 backdrop-blur-sm">
+        <div className="relative bg-black rounded-sm shadow-2xl border border-gray-900 overflow-hidden w-full max-w-sm p-8 text-center bg-opacity-95 backdrop-blur-sm">
           <div className="mb-6">
             <div className="inline-block bg-black bg-opacity-40 border-2 border-amber-900 px-6 py-2 shadow-inner">
               <h1 className="text-lg font-serif tracking-widest text-amber-600" style={{
@@ -247,29 +256,32 @@ export default function TomRiddleDiary() {
 
       {/* Desktop Book View */}
       <div className="hidden md:block relative w-full max-w-[700px] h-[850px]">
-        {/* Book - NO ROTATION as requested */}
+        {/* Book */}
         <div className="relative w-full h-full">
           {/* Deep shadow under book */}
           <div className="absolute inset-0 bg-black opacity-70 blur-3xl transform translate-y-8 scale-95"></div>
 
-          {/* Book cover - dark leather with metal corners */}
-          <div className="relative w-full h-full bg-gradient-to-br from-slate-800 via-slate-900 to-black rounded-sm shadow-2xl border border-gray-900 overflow-hidden flex flex-col">
+          {/* Book cover - NOW BLACK to match old background */}
+          <div className="relative w-full h-full bg-black rounded-sm shadow-2xl border border-gray-900 overflow-hidden flex flex-col">
             {/* Leather texture overlay */}
             <div className="absolute inset-0 opacity-40" style={{
               backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E")`,
               mixBlendMode: 'overlay'
             }}></div>
 
+            {/* Subtle Gradient for depth (Dark gray to black) */}
+            <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-950 opacity-90"></div>
+
             {/* Scratches and wear on cover */}
             <div className="absolute inset-0 opacity-20">
               {scratches.map((s) => (
                 <div
-                  key={`scratch-${s.id}`}
-                  className="absolute bg-gray-600 opacity-30"
+                  key={`scratch - ${s.id} `}
+                  className="absolute bg-gray-700 opacity-30"
                   style={{
-                    left: `${s.left}%`,
-                    top: `${s.top}%`,
-                    width: `${s.width}px`,
+                    left: `${s.left}% `,
+                    top: `${s.top}% `,
+                    width: `${s.width} px`,
                     height: '1px',
                     transform: `rotate(${s.transform}deg)`
                   }}
@@ -277,8 +289,8 @@ export default function TomRiddleDiary() {
               ))}
             </div>
 
-            <div className="p-6 md:p-10 h-full flex flex-col">
-              {/* Metal corner decorations - ornate style */}
+            <div className="p-6 md:p-10 h-full flex flex-col relative z-10">
+              {/* Metal corner decorations */}
               {/* Top Left Corner */}
               <div className="absolute top-0 left-0 w-24 h-24 opacity-70">
                 <div className="absolute top-3 left-3 w-20 h-20">
@@ -329,7 +341,7 @@ export default function TomRiddleDiary() {
 
               {/* Title label on cover - ALWAYS VISIBLE now */}
               <div className="text-center mb-10 relative z-10 shrink-0">
-                <div className="inline-block bg-black bg-opacity-40 border-2 border-amber-900 px-12 py-4 shadow-inner">
+                <div className="inline-block bg-black bg-opacity-70 border-2 border-amber-900 px-12 py-4 shadow-inner transform hover:scale-[1.02] transition-transform duration-700">
                   <h1 className="text-2xl md:text-3xl font-serif tracking-widest text-amber-600" style={{
                     fontFamily: 'Georgia, serif',
                     textShadow: '1px 1px 2px rgba(0,0,0,0.8), 0 0 1px rgba(180,140,80,0.5)'
@@ -360,13 +372,13 @@ export default function TomRiddleDiary() {
                 {/* Small aging spots scattered */}
                 {agingSpots.map((s) => (
                   <div
-                    key={`spot-${s.id}`}
+                    key={`spot - ${s.id} `}
                     className="absolute rounded-full bg-yellow-800 opacity-20 blur-sm"
                     style={{
-                      left: `${s.left}%`,
-                      top: `${s.top}%`,
-                      width: `${s.width}px`,
-                      height: `${s.height}px`,
+                      left: `${s.left}% `,
+                      top: `${s.top}% `,
+                      width: `${s.width} px`,
+                      height: `${s.height} px`,
                     }}
                   />
                 ))}
@@ -387,7 +399,7 @@ export default function TomRiddleDiary() {
 
                 {/* Content area */}
                 <div className="relative p-12 md:p-16 flex-grow flex flex-col justify-center items-center text-center">
-                  {!message && !showNotFound && !isWriting && (
+                  {!message && !showNotFound && (
                     <div className="w-full space-y-12">
                       <div className="space-y-4">
                         <p className="text-gray-700 text-lg font-serif italic mb-6 opacity-70">
@@ -406,39 +418,16 @@ export default function TomRiddleDiary() {
 
                       <button
                         onClick={handleSubmit}
-                        className="group relative px-8 py-3 overflow-hidden rounded-full font-serif text-base transition-all duration-300 hover:scale-105"
+                        className="text-gray-600 font-serif text-base hover:text-gray-900 transition-colors italic opacity-70 hover:opacity-100"
                       >
-                        {/* Slytherin-ish styled button */}
-                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-950 to-green-900 opacity-90 group-hover:opacity-100 transition-opacity"></div>
-                        <div className="relative flex items-center justify-center space-x-3 text-emerald-100 group-hover:text-white">
-                          {/* Snake-like icon (SVG) */}
-                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
-                          </svg>
-                          <span className="tracking-[0.2em] uppercase font-bold">Спитати</span>
-                        </div>
+                        Спитати
                       </button>
                     </div>
                   )}
 
-                  {isWriting && (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <p
-                        className="text-gray-900 text-2xl leading-loose whitespace-pre-wrap"
-                        style={{
-                          fontFamily: 'Brush Script MT, cursive',
-                          color: '#1a1a2e'
-                        }}
-                      >
-                        {inkText}
-                        <span className="inline-block w-1 h-8 bg-gray-900 animate-pulse ml-1"></span>
-                      </p>
-                    </div>
-                  )}
-
-                  {message && !isWriting && (
-                    <div className="w-full h-full flex flex-col items-center justify-center space-y-12 animate-fade-in">
-                      <div className="w-full">
+                  {message && (
+                    <div className="w-full h-full flex flex-col items-center justify-center space-y-12">
+                      <div className="w-full animate-ink-reveal">
                         <p
                           className="text-gray-900 text-2xl leading-loose mb-16"
                           style={{
@@ -459,8 +448,9 @@ export default function TomRiddleDiary() {
                   )}
 
                   {showNotFound && (
-                    <div className="w-full h-full flex flex-col items-center justify-center space-y-12 animate-fade-in">
-                      <div className="w-full flex flex-col justify-center">
+                    <div className="w-full h-full flex flex-col items-center justify-center space-y-12">
+                      <div className="w-full flex flex-col justify-center animate-ink-reveal">
+                        {/* Default response text */}
                         <p
                           className="text-gray-800 text-3xl leading-loose italic mb-10"
                           style={{
@@ -499,21 +489,34 @@ export default function TomRiddleDiary() {
       </div>
 
       <style jsx>{`
-        @keyframes fade-in {
-          from {
-            opacity: 0;
-          }
+@keyframes fade -in {
+  from {
+  opacity: 0;
+}
           to {
-            opacity: 1;
+  opacity: 1;
+}
+        }
+        .animate - fade -in {
+  animation: fade -in 0.8s ease- out;
+        }
+@keyframes ink - reveal {
+  0 % {
+    clip- path: inset(0 0 100 % 0);
+  opacity: 0.5;
+}
+100 % {
+  clip- path: inset(0 0 0 % 0);
+opacity: 1;
           }
         }
-        .animate-fade-in {
-          animation: fade-in 0.8s ease-out;
-        }
-        .perspective-1000 {
-          perspective: 1000px;
-        }
-      `}</style>
+        .animate - ink - reveal {
+  animation: ink - reveal 2s cubic - bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+        .perspective - 1000 {
+  perspective: 1000px;
+}
+`}</style>
     </div>
   );
 }
