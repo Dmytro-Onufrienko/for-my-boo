@@ -38,7 +38,8 @@ export default function TomRiddleDiary() {
   // Visual state to prevent re-renders on every keystroke
   const [greenParticles, setGreenParticles] = useState<Particle[]>([]);
   const [redParticles, setRedParticles] = useState<Particle[]>([]);
-  const [purpleParticles, setPurpleParticles] = useState<Particle[]>([]); // New purple particles
+  const [purpleParticles, setPurpleParticles] = useState<Particle[]>([]);
+  const [marbleParticles, setMarbleParticles] = useState<Particle[]>([]); // New marble particles
   const [scratches, setScratches] = useState<Scratch[]>([]);
   const [agingSpots, setAgingSpots] = useState<AgingSpot[]>([]);
 
@@ -54,19 +55,19 @@ export default function TomRiddleDiary() {
       duration: 3 + Math.random() * 4
     })));
 
-    // Generate Red Particles (Fewer, smaller)
-    setRedParticles([...Array(15)].map((_, i) => ({
+    // Generate Purple Particles (Now Priority: Larger and more than red)
+    setPurpleParticles([...Array(20)].map((_, i) => ({
       id: i,
       left: Math.random() * 100,
       top: Math.random() * 100,
-      width: 2 + Math.random() * 4,
-      height: 2 + Math.random() * 4,
+      width: 2 + Math.random() * 5,
+      height: 2 + Math.random() * 5,
       delay: Math.random() * 5,
       duration: 4 + Math.random() * 5
     })));
 
-    // Generate Purple Particles (Even fewer, smaller)
-    setPurpleParticles([...Array(10)].map((_, i) => ({
+    // Generate Red Particles (Now Secondary: Smaller and fewer)
+    setRedParticles([...Array(10)].map((_, i) => ({
       id: i,
       left: Math.random() * 100,
       top: Math.random() * 100,
@@ -74,6 +75,17 @@ export default function TomRiddleDiary() {
       height: 2 + Math.random() * 3,
       delay: Math.random() * 6,
       duration: 5 + Math.random() * 6
+    })));
+
+    // Generate Marble Particles (New: Very small, white/silver)
+    setMarbleParticles([...Array(15)].map((_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      width: 1 + Math.random() * 3,
+      height: 1 + Math.random() * 3,
+      delay: Math.random() * 3,
+      duration: 2 + Math.random() * 4
     })));
 
     // Generate Scratches
@@ -121,7 +133,7 @@ export default function TomRiddleDiary() {
           setMessage(foundMessage);
           setIsWriting(false);
         }
-      }, 150); // Slowed down from 50ms to 150ms
+      }, 100); // Speed increased from 150ms to 100ms
     } else {
       setShowNotFound(true);
       setIsWriting(false);
@@ -161,7 +173,23 @@ export default function TomRiddleDiary() {
           />
         ))}
 
-        {/* Red Particles */}
+        {/* Purple Particles (Priority) */}
+        {purpleParticles.map((p) => (
+          <div
+            key={`purple-${p.id}`}
+            className="absolute rounded-full bg-violet-600 opacity-15 animate-pulse"
+            style={{
+              left: `${p.left}%`,
+              top: `${p.top}%`,
+              width: `${p.width}px`,
+              height: `${p.height}px`,
+              animationDelay: `${p.delay}s`,
+              animationDuration: `${p.duration}s`
+            }}
+          />
+        ))}
+
+        {/* Red Particles (Secondary) */}
         {redParticles.map((p) => (
           <div
             key={`red-${p.id}`}
@@ -177,11 +205,11 @@ export default function TomRiddleDiary() {
           />
         ))}
 
-        {/* Purple Particles (Smallest, fewest) */}
-        {purpleParticles.map((p) => (
+        {/* Marble Particles (New) */}
+        {marbleParticles.map((p) => (
           <div
-            key={`purple-${p.id}`}
-            className="absolute rounded-full bg-violet-600 opacity-10 animate-pulse"
+            key={`marble-${p.id}`}
+            className="absolute rounded-full bg-slate-200 opacity-10 animate-pulse"
             style={{
               left: `${p.left}%`,
               top: `${p.top}%`,
@@ -194,9 +222,33 @@ export default function TomRiddleDiary() {
         ))}
       </div>
 
-      <div className="relative w-full max-w-[550px] h-[800px] perspective-1000">
-        {/* Book with 3D effect */}
-        <div className="relative w-full h-full transform-gpu" style={{ transform: 'rotateY(-2deg) rotateX(2deg)' }}>
+      {/* Mobile/Small Screen Optimized Message */}
+      <div className="md:hidden relative w-full h-[90vh] flex flex-col items-center justify-center z-20">
+        <div className="relative bg-gradient-to-br from-slate-800 via-slate-900 to-black rounded-sm shadow-2xl border border-gray-900 overflow-hidden w-full max-w-sm p-8 text-center bg-opacity-90 backdrop-blur-sm">
+          <div className="mb-6">
+            <div className="inline-block bg-black bg-opacity-40 border-2 border-amber-900 px-6 py-2 shadow-inner">
+              <h1 className="text-lg font-serif tracking-widest text-amber-600" style={{
+                fontFamily: 'Georgia, serif',
+                textShadow: '1px 1px 2px rgba(0,0,0,0.8), 0 0 1px rgba(180,140,80,0.5)'
+              }}>
+                TOM MARVOLO RIDDLE
+              </h1>
+            </div>
+          </div>
+
+          <p className="text-amber-100 text-lg font-serif italic mb-6 opacity-80 decoration-amber-700">
+            Щоденник не відкривається на таких маленьких екранах...
+          </p>
+          <p className="text-amber-500/60 text-sm font-serif italic">
+            Будь ласка, спробуй відкрити на комп'ютері.
+          </p>
+        </div>
+      </div>
+
+      {/* Desktop Book View */}
+      <div className="hidden md:block relative w-full max-w-[700px] h-[850px]">
+        {/* Book - NO ROTATION as requested */}
+        <div className="relative w-full h-full">
           {/* Deep shadow under book */}
           <div className="absolute inset-0 bg-black opacity-70 blur-3xl transform translate-y-8 scale-95"></div>
 
@@ -225,71 +277,67 @@ export default function TomRiddleDiary() {
               ))}
             </div>
 
-            <div className="p-6 md:p-8 h-full flex flex-col">
+            <div className="p-6 md:p-10 h-full flex flex-col">
               {/* Metal corner decorations - ornate style */}
               {/* Top Left Corner */}
-              <div className="absolute top-0 left-0 w-20 h-20 opacity-70">
-                <div className="absolute top-3 left-3 w-16 h-16">
+              <div className="absolute top-0 left-0 w-24 h-24 opacity-70">
+                <div className="absolute top-3 left-3 w-20 h-20">
                   <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-amber-700 via-amber-600 to-transparent"></div>
                   <div className="absolute top-0 left-0 w-0.5 h-full bg-gradient-to-b from-amber-700 via-amber-600 to-transparent"></div>
                   <div className="absolute top-0 left-0 w-3 h-3 bg-amber-700 rounded-sm"></div>
-                  <div className="absolute top-1 left-4 w-8 h-0.5 bg-amber-800"></div>
-                  <div className="absolute top-4 left-1 w-0.5 h-8 bg-amber-800"></div>
+                  <div className="absolute top-1 left-4 w-10 h-0.5 bg-amber-800"></div>
+                  <div className="absolute top-4 left-1 w-0.5 h-10 bg-amber-800"></div>
                   <div className="absolute top-2 left-2 w-2 h-2 border border-amber-600 rotate-45"></div>
                 </div>
               </div>
 
               {/* Top Right Corner */}
-              <div className="absolute top-0 right-0 w-20 h-20 opacity-70">
-                <div className="absolute top-3 right-3 w-16 h-16">
+              <div className="absolute top-0 right-0 w-24 h-24 opacity-70">
+                <div className="absolute top-3 right-3 w-20 h-20">
                   <div className="absolute top-0 right-0 w-full h-0.5 bg-gradient-to-l from-amber-700 via-amber-600 to-transparent"></div>
                   <div className="absolute top-0 right-0 w-0.5 h-full bg-gradient-to-b from-amber-700 via-amber-600 to-transparent"></div>
                   <div className="absolute top-0 right-0 w-3 h-3 bg-amber-700 rounded-sm"></div>
-                  <div className="absolute top-1 right-4 w-8 h-0.5 bg-amber-800"></div>
-                  <div className="absolute top-4 right-1 w-0.5 h-8 bg-amber-800"></div>
+                  <div className="absolute top-1 right-4 w-10 h-0.5 bg-amber-800"></div>
+                  <div className="absolute top-4 right-1 w-0.5 h-10 bg-amber-800"></div>
                   <div className="absolute top-2 right-2 w-2 h-2 border border-amber-600 rotate-45"></div>
                 </div>
               </div>
 
               {/* Bottom Left Corner */}
-              <div className="absolute bottom-0 left-0 w-20 h-20 opacity-70">
-                <div className="absolute bottom-3 left-3 w-16 h-16">
+              <div className="absolute bottom-0 left-0 w-24 h-24 opacity-70">
+                <div className="absolute bottom-3 left-3 w-20 h-20">
                   <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-amber-700 via-amber-600 to-transparent"></div>
                   <div className="absolute bottom-0 left-0 w-0.5 h-full bg-gradient-to-t from-amber-700 via-amber-600 to-transparent"></div>
                   <div className="absolute bottom-0 left-0 w-3 h-3 bg-amber-700 rounded-sm"></div>
-                  <div className="absolute bottom-1 left-4 w-8 h-0.5 bg-amber-800"></div>
-                  <div className="absolute bottom-4 left-1 w-0.5 h-8 bg-amber-800"></div>
+                  <div className="absolute bottom-1 left-4 w-10 h-0.5 bg-amber-800"></div>
+                  <div className="absolute bottom-4 left-1 w-0.5 h-10 bg-amber-800"></div>
                   <div className="absolute bottom-2 left-2 w-2 h-2 border border-amber-600 rotate-45"></div>
                 </div>
               </div>
 
               {/* Bottom Right Corner */}
-              <div className="absolute bottom-0 right-0 w-20 h-20 opacity-70">
-                <div className="absolute bottom-3 right-3 w-16 h-16">
+              <div className="absolute bottom-0 right-0 w-24 h-24 opacity-70">
+                <div className="absolute bottom-3 right-3 w-20 h-20">
                   <div className="absolute bottom-0 right-0 w-full h-0.5 bg-gradient-to-l from-amber-700 via-amber-600 to-transparent"></div>
                   <div className="absolute bottom-0 right-0 w-0.5 h-full bg-gradient-to-t from-amber-700 via-amber-600 to-transparent"></div>
                   <div className="absolute bottom-0 right-0 w-3 h-3 bg-amber-700 rounded-sm"></div>
-                  <div className="absolute bottom-1 right-4 w-8 h-0.5 bg-amber-800"></div>
-                  <div className="absolute bottom-4 right-1 w-0.5 h-8 bg-amber-800"></div>
+                  <div className="absolute bottom-1 right-4 w-10 h-0.5 bg-amber-800"></div>
+                  <div className="absolute bottom-4 right-1 w-0.5 h-10 bg-amber-800"></div>
                   <div className="absolute bottom-2 right-2 w-2 h-2 border border-amber-600 rotate-45"></div>
                 </div>
               </div>
 
-              {/* Title label on cover - looks worn and embossed */}
-              {!message && !showNotFound && !isWriting && (
-                <div className="text-center mb-8 relative z-10">
-                  <div className="inline-block bg-black bg-opacity-40 border-2 border-amber-900 px-10 py-3 shadow-inner">
-                    <h1 className="text-xl md:text-2xl font-serif tracking-widest text-amber-600" style={{
-                      fontFamily: 'Georgia, serif',
-                      textShadow: '1px 1px 2px rgba(0,0,0,0.8), 0 0 1px rgba(180,140,80,0.5)'
-                    }}>
-                      TOM MARVOLO RIDDLE
-                    </h1>
-                  </div>
+              {/* Title label on cover - ALWAYS VISIBLE now */}
+              <div className="text-center mb-10 relative z-10 shrink-0">
+                <div className="inline-block bg-black bg-opacity-40 border-2 border-amber-900 px-12 py-4 shadow-inner">
+                  <h1 className="text-2xl md:text-3xl font-serif tracking-widest text-amber-600" style={{
+                    fontFamily: 'Georgia, serif',
+                    textShadow: '1px 1px 2px rgba(0,0,0,0.8), 0 0 1px rgba(180,140,80,0.5)'
+                  }}>
+                    TOM MARVOLO RIDDLE
+                  </h1>
                 </div>
-              )}
-
-
+              </div>
 
               {/* Open pages - old yellowed paper */}
               <div className="relative flex-grow bg-gradient-to-br from-amber-100 via-yellow-50 to-amber-200 shadow-2xl overflow-hidden flex flex-col" style={{
@@ -338,11 +386,11 @@ export default function TomRiddleDiary() {
                 <div className="absolute top-40 right-16 w-4 h-4 bg-slate-800 rounded-full opacity-25 blur-sm"></div>
 
                 {/* Content area */}
-                <div className="relative p-8 md:p-12 flex-grow flex flex-col justify-center items-center text-center">
+                <div className="relative p-12 md:p-16 flex-grow flex flex-col justify-center items-center text-center">
                   {!message && !showNotFound && !isWriting && (
-                    <div className="w-full space-y-8">
-                      <div className="space-y-3">
-                        <p className="text-gray-700 text-base font-serif italic mb-4 opacity-70">
+                    <div className="w-full space-y-12">
+                      <div className="space-y-4">
+                        <p className="text-gray-700 text-lg font-serif italic mb-6 opacity-70">
                           Напиши щось у щоденник...
                         </p>
                         <input
@@ -351,16 +399,24 @@ export default function TomRiddleDiary() {
                           onChange={(e) => setCode(e.target.value)}
                           onKeyDown={(e) => e.key === 'Enter' && handleSubmit(e)}
                           placeholder=""
-                          className="w-full bg-transparent border-b border-gray-500 px-1 py-3 text-gray-900 text-xl font-serif focus:outline-none focus:border-gray-700 placeholder-gray-400"
+                          className="w-full bg-transparent border-b-2 border-gray-500 px-2 py-4 text-gray-900 text-2xl font-serif focus:outline-none focus:border-gray-800 placeholder-gray-400"
                           style={{ fontFamily: 'Brush Script MT, cursive' }}
                         />
                       </div>
 
                       <button
                         onClick={handleSubmit}
-                        className="text-gray-600 font-serif text-sm hover:text-gray-800 transition-colors italic opacity-60 hover:opacity-100"
+                        className="group relative px-8 py-3 overflow-hidden rounded-full font-serif text-base transition-all duration-300 hover:scale-105"
                       >
-                        ...
+                        {/* Slytherin-ish styled button */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-950 to-green-900 opacity-90 group-hover:opacity-100 transition-opacity"></div>
+                        <div className="relative flex items-center justify-center space-x-3 text-emerald-100 group-hover:text-white">
+                          {/* Snake-like icon (SVG) */}
+                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
+                          </svg>
+                          <span className="tracking-[0.2em] uppercase font-bold">Спитати</span>
+                        </div>
                       </button>
                     </div>
                   )}
@@ -368,23 +424,23 @@ export default function TomRiddleDiary() {
                   {isWriting && (
                     <div className="w-full h-full flex items-center justify-center">
                       <p
-                        className="text-gray-900 text-xl leading-loose whitespace-pre-wrap"
+                        className="text-gray-900 text-2xl leading-loose whitespace-pre-wrap"
                         style={{
                           fontFamily: 'Brush Script MT, cursive',
                           color: '#1a1a2e'
                         }}
                       >
                         {inkText}
-                        <span className="inline-block w-1 h-6 bg-gray-900 animate-pulse ml-1"></span>
+                        <span className="inline-block w-1 h-8 bg-gray-900 animate-pulse ml-1"></span>
                       </p>
                     </div>
                   )}
 
                   {message && !isWriting && (
-                    <div className="w-full h-full flex flex-col items-center justify-center space-y-8 animate-fade-in">
+                    <div className="w-full h-full flex flex-col items-center justify-center space-y-12 animate-fade-in">
                       <div className="w-full">
                         <p
-                          className="text-gray-900 text-xl leading-loose mb-12"
+                          className="text-gray-900 text-2xl leading-loose mb-16"
                           style={{
                             fontFamily: 'Brush Script MT, cursive',
                             color: '#1a1a2e'
@@ -395,7 +451,7 @@ export default function TomRiddleDiary() {
                       </div>
                       <button
                         onClick={reset}
-                        className="text-gray-600 font-serif text-sm hover:text-gray-800 transition-colors italic opacity-60 hover:opacity-100"
+                        className="text-gray-600 font-serif text-base hover:text-gray-900 transition-colors italic opacity-70 hover:opacity-100"
                       >
                         Написати ще...
                       </button>
@@ -403,10 +459,10 @@ export default function TomRiddleDiary() {
                   )}
 
                   {showNotFound && (
-                    <div className="w-full h-full flex flex-col items-center justify-center space-y-8 animate-fade-in">
+                    <div className="w-full h-full flex flex-col items-center justify-center space-y-12 animate-fade-in">
                       <div className="w-full flex flex-col justify-center">
                         <p
-                          className="text-gray-800 text-xxl leading-loose italic mb-8"
+                          className="text-gray-800 text-3xl leading-loose italic mb-10"
                           style={{
                             fontFamily: 'Brush Script MT, cursive',
                             color: '#2d2d3a'
@@ -415,7 +471,7 @@ export default function TomRiddleDiary() {
                           Я не можу відповісти на це зараз.
                         </p>
                         <p
-                          className="text-gray-700 text-xxl leading-loose italic opacity-80"
+                          className="text-gray-700 text-2xl leading-loose italic opacity-80"
                           style={{
                             fontFamily: 'Brush Script MT, cursive'
                           }}
@@ -429,7 +485,7 @@ export default function TomRiddleDiary() {
                       </div>
                       <button
                         onClick={reset}
-                        className="text-gray-600 font-serif text-sm hover:text-gray-800 transition-colors italic opacity-60 hover:opacity-100"
+                        className="text-gray-600 font-serif text-base hover:text-gray-900 transition-colors italic opacity-70 hover:opacity-100"
                       >
                         Спробувати знову...
                       </button>
