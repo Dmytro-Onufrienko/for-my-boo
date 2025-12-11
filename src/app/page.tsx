@@ -246,10 +246,10 @@ export default function TomRiddleDiary() {
           </div>
 
           <p className="text-amber-100 text-lg font-serif italic mb-6 opacity-80 decoration-amber-700">
-            Щоденник не відкривається на таких маленьких екранах...
+            І ти називаєш це екраном?
           </p>
-          <p className="text-amber-500/60 text-sm font-serif italic">
-            Будь ласка, спробуй відкрити на комп'ютері.
+          <p className="text-amber-100 text-lg font-serif italic mb-6 opacity-80 decoration-amber-700">
+            Щоденник не відкривається на таких маленьких...
           </p>
         </div>
       </div>
@@ -510,7 +510,7 @@ export default function TomRiddleDiary() {
           }
         }
         .animate-ink-reveal {
-          animation: ink-reveal 2s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+          animation: ink-reveal 6s ease-in-out forwards;
         }
         .perspective-1000 {
           perspective: 1000px;
