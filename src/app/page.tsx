@@ -492,32 +492,28 @@ export default function TomRiddleDiary() {
       </div>
 
       <style jsx>{`
-@keyframes fade -in {
-  from {
-  opacity: 0;
-}
-          to {
-  opacity: 1;
-}
+        @keyframes fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
         }
-        .animate - fade -in {
-  animation: fade -in 0.8s ease- out;
+        .animate-fade-in {
+          animation: fade-in 0.8s ease-out;
         }
-@keyframes ink - reveal {
-  0 % {
-    clip- path: inset(0 0 100 % 0);
-  opacity: 0.5;
-}
-100 % {
-  clip- path: inset(0 0 0 % 0);
-opacity: 1;
+        @keyframes ink-reveal {
+          0% {
+            clip-path: inset(0 0 100% 0);
+            opacity: 0.5;
+          }
+          100% {
+            clip-path: inset(0 0 0% 0);
+            opacity: 1;
           }
         }
-        .animate - ink - reveal {
-  animation: ink - reveal 2s cubic - bezier(0.165, 0.84, 0.44, 1) forwards;
-}
-        .perspective - 1000 {
-  perspective: 1000px;
+        .animate-ink-reveal {
+          animation: ink-reveal 2s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+        }
+        .perspective-1000 {
+          perspective: 1000px;
 }
 `}</style>
     </div>
