@@ -230,7 +230,7 @@ export default function TomRiddleDiary() {
                           type="text"
                           value={code}
                           onChange={(e) => setCode(e.target.value)}
-                          onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+                          onKeyDown={(e) => e.key === 'Enter' && handleSubmit(e)}
                           placeholder=""
                           className="w-full bg-transparent border-b border-gray-500 px-1 py-3 text-gray-900 text-xl font-serif focus:outline-none focus:border-gray-700 placeholder-gray-400"
                           style={{ fontFamily: 'Brush Script MT, cursive' }}
