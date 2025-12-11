@@ -287,7 +287,7 @@ export default function TomRiddleDiary() {
                     <div className="space-y-8 animate-fade-in pt-8">
                       <div className="min-h-[300px] flex flex-col justify-center">
                         <p
-                          className="text-gray-800 text-xl leading-loose italic mb-8"
+                          className="text-gray-800 text-xxl leading-loose italic mb-8"
                           style={{
                             fontFamily: 'Brush Script MT, cursive',
                             color: '#2d2d3a'
@@ -296,7 +296,7 @@ export default function TomRiddleDiary() {
                           Я не можу відповісти на це зараз.
                         </p>
                         <p
-                          className="text-gray-700 text-lg leading-loose italic opacity-80"
+                          className="text-gray-700 text-xxl leading-loose italic opacity-80"
                           style={{
                             fontFamily: 'Brush Script MT, cursive'
                           }}
