@@ -1,6 +1,32 @@
 "use client"
 
-import React, { FormEvent, MouseEvent, useState, KeyboardEvent } from 'react';
+import React, { FormEvent, MouseEvent, useState, KeyboardEvent, useEffect } from 'react';
+
+interface Particle {
+  id: number;
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+  delay: number;
+  duration: number;
+}
+
+interface Scratch {
+  id: number;
+  left: number;
+  top: number;
+  width: number;
+  transform: number;
+}
+
+interface AgingSpot {
+  id: number;
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+}
 
 export default function TomRiddleDiary() {
   const [code, setCode] = useState('');
@@ -8,6 +34,66 @@ export default function TomRiddleDiary() {
   const [isWriting, setIsWriting] = useState(false);
   const [showNotFound, setShowNotFound] = useState(false);
   const [inkText, setInkText] = useState('');
+
+  // Visual state to prevent re-renders on every keystroke
+  const [greenParticles, setGreenParticles] = useState<Particle[]>([]);
+  const [redParticles, setRedParticles] = useState<Particle[]>([]);
+  const [purpleParticles, setPurpleParticles] = useState<Particle[]>([]); // New purple particles
+  const [scratches, setScratches] = useState<Scratch[]>([]);
+  const [agingSpots, setAgingSpots] = useState<AgingSpot[]>([]);
+
+  useEffect(() => {
+    // Generate Green Particles
+    setGreenParticles([...Array(25)].map((_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      width: 3 + Math.random() * 6,
+      height: 3 + Math.random() * 6,
+      delay: Math.random() * 4,
+      duration: 3 + Math.random() * 4
+    })));
+
+    // Generate Red Particles (Fewer, smaller)
+    setRedParticles([...Array(15)].map((_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      width: 2 + Math.random() * 4,
+      height: 2 + Math.random() * 4,
+      delay: Math.random() * 5,
+      duration: 4 + Math.random() * 5
+    })));
+
+    // Generate Purple Particles (Even fewer, smaller)
+    setPurpleParticles([...Array(10)].map((_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      width: 2 + Math.random() * 3,
+      height: 2 + Math.random() * 3,
+      delay: Math.random() * 6,
+      duration: 5 + Math.random() * 6
+    })));
+
+    // Generate Scratches
+    setScratches([...Array(8)].map((_, i) => ({
+      id: i,
+      left: 20 + Math.random() * 60,
+      top: 20 + Math.random() * 60,
+      width: 30 + Math.random() * 80,
+      transform: Math.random() * 180
+    })));
+
+    // Generate Aging Spots
+    setAgingSpots([...Array(25)].map((_, i) => ({
+      id: i,
+      left: 10 + Math.random() * 80,
+      top: 10 + Math.random() * 80,
+      width: 4 + Math.random() * 12,
+      height: 4 + Math.random() * 12
+    })));
+  }, []);
 
   // Тут додай свої коди та повідомлення
   const messages: Record<string, string> = {
@@ -35,7 +121,7 @@ export default function TomRiddleDiary() {
           setMessage(foundMessage);
           setIsWriting(false);
         }
-      }, 50);
+      }, 150); // Slowed down from 50ms to 150ms
     } else {
       setShowNotFound(true);
       setIsWriting(false);
@@ -57,34 +143,52 @@ export default function TomRiddleDiary() {
       {/* Dark atmospheric background */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-black to-gray-900"></div>
 
-      {/* Subtle green magical glow particles */}
+      {/* Particles Layer */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(25)].map((_, i) => (
+        {/* Green Particles */}
+        {greenParticles.map((p) => (
           <div
-            key={`green-${i}`}
+            key={`green-${p.id}`}
             className="absolute rounded-full bg-emerald-500 opacity-5 animate-pulse"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              width: `${3 + Math.random() * 6}px`,
-              height: `${3 + Math.random() * 6}px`,
-              animationDelay: `${Math.random() * 4}s`,
-              animationDuration: `${3 + Math.random() * 4}s`
+              left: `${p.left}%`,
+              top: `${p.top}%`,
+              width: `${p.width}px`,
+              height: `${p.height}px`,
+              animationDelay: `${p.delay}s`,
+              animationDuration: `${p.duration}s`
             }}
           />
         ))}
-        {/* Red magical particles - fewer and smaller */}
-        {[...Array(15)].map((_, i) => (
+
+        {/* Red Particles */}
+        {redParticles.map((p) => (
           <div
-            key={`red-${i}`}
+            key={`red-${p.id}`}
             className="absolute rounded-full bg-rose-600 opacity-10 animate-pulse"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              width: `${2 + Math.random() * 4}px`,
-              height: `${2 + Math.random() * 4}px`,
-              animationDelay: `${Math.random() * 5}s`,
-              animationDuration: `${4 + Math.random() * 5}s`
+              left: `${p.left}%`,
+              top: `${p.top}%`,
+              width: `${p.width}px`,
+              height: `${p.height}px`,
+              animationDelay: `${p.delay}s`,
+              animationDuration: `${p.duration}s`
+            }}
+          />
+        ))}
+
+        {/* Purple Particles (Smallest, fewest) */}
+        {purpleParticles.map((p) => (
+          <div
+            key={`purple-${p.id}`}
+            className="absolute rounded-full bg-violet-600 opacity-10 animate-pulse"
+            style={{
+              left: `${p.left}%`,
+              top: `${p.top}%`,
+              width: `${p.width}px`,
+              height: `${p.height}px`,
+              animationDelay: `${p.delay}s`,
+              animationDuration: `${p.duration}s`
             }}
           />
         ))}
@@ -106,16 +210,16 @@ export default function TomRiddleDiary() {
 
             {/* Scratches and wear on cover */}
             <div className="absolute inset-0 opacity-20">
-              {[...Array(8)].map((_, i) => (
+              {scratches.map((s) => (
                 <div
-                  key={i}
+                  key={`scratch-${s.id}`}
                   className="absolute bg-gray-600 opacity-30"
                   style={{
-                    left: `${20 + Math.random() * 60}%`,
-                    top: `${20 + Math.random() * 60}%`,
-                    width: `${30 + Math.random() * 80}px`,
+                    left: `${s.left}%`,
+                    top: `${s.top}%`,
+                    width: `${s.width}px`,
                     height: '1px',
-                    transform: `rotate(${Math.random() * 180}deg)`
+                    transform: `rotate(${s.transform}deg)`
                   }}
                 />
               ))}
@@ -206,15 +310,15 @@ export default function TomRiddleDiary() {
                 <div className="absolute bottom-16 right-24 w-32 h-32 bg-yellow-900 opacity-10 rounded-full blur-xl"></div>
 
                 {/* Small aging spots scattered */}
-                {[...Array(25)].map((_, i) => (
+                {agingSpots.map((s) => (
                   <div
-                    key={i}
+                    key={`spot-${s.id}`}
                     className="absolute rounded-full bg-yellow-800 opacity-20 blur-sm"
                     style={{
-                      left: `${10 + Math.random() * 80}%`,
-                      top: `${10 + Math.random() * 80}%`,
-                      width: `${4 + Math.random() * 12}px`,
-                      height: `${4 + Math.random() * 12}px`,
+                      left: `${s.left}%`,
+                      top: `${s.top}%`,
+                      width: `${s.width}px`,
+                      height: `${s.height}px`,
                     }}
                   />
                 ))}
