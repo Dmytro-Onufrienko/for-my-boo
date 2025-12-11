@@ -433,7 +433,7 @@ export default function TomRiddleDiary() {
                         <p
                           className="text-gray-900 text-2xl leading-loose mb-16"
                           style={{
-                            fontFamily: 'Brush Script MT, cursive',
+                            fontFamily: 'var(--font-caveat), cursive',
                             color: '#1a1a2e'
                           }}
                         >
@@ -456,7 +456,7 @@ export default function TomRiddleDiary() {
                         <p
                           className="text-gray-800 text-3xl leading-loose italic mb-10"
                           style={{
-                            fontFamily: 'Brush Script MT, cursive',
+                            fontFamily: 'var(--font-caveat), cursive',
                             color: '#2d2d3a'
                           }}
                         >
@@ -465,7 +465,7 @@ export default function TomRiddleDiary() {
                         <p
                           className="text-gray-700 text-2xl leading-loose italic opacity-80"
                           style={{
-                            fontFamily: 'Brush Script MT, cursive'
+                            fontFamily: 'var(--font-caveat), cursive'
                           }}
                         >
                           Спробуй пізніше...<br />
