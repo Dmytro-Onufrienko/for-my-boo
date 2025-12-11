@@ -1,6 +1,6 @@
 "use client"
 
-import React, { FormEvent, MouseEvent, useState } from 'react';
+import React, { FormEvent, MouseEvent, useState, KeyboardEvent } from 'react';
 
 export default function TomRiddleDiary() {
   const [code, setCode] = useState('');
@@ -16,7 +16,7 @@ export default function TomRiddleDiary() {
     'EXPECTO': 'Щастя можна знайти навіть у найтемніші часи, якщо не забувати запалювати світло.',
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement> | MouseEvent) => {
+  const handleSubmit = (e?: React.FormEvent<HTMLFormElement> | React.MouseEvent | React.KeyboardEvent<HTMLInputElement>) => {
     e?.preventDefault();
     const foundMessage = messages[code.toUpperCase()];
 
