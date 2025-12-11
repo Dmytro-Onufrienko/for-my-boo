@@ -10,7 +10,7 @@ export default function TomRiddleDiary() {
   const [inkText, setInkText] = useState('');
 
   // Тут додай свої коди та повідомлення
-  const messages = {
+  const messages: Record<string, string> = {
     'PATRONUS': 'Твоя магія сильніша ніж ти думаєш. Продовжуй вірити.',
     'LUMOS': 'Світло завжди перемагає темряву. Ти на правильному шляху.',
     'EXPECTO': 'Щастя можна знайти навіть у найтемніші часи, якщо не забувати запалювати світло.',
