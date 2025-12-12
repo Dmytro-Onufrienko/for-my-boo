@@ -31,6 +31,8 @@ interface AgingSpot {
 export default function TomRiddleDiary() {
   const [code, setCode] = useState('');
   const [message, setMessage] = useState('');
+  const [displayedText, setDisplayedText] = useState(''); // For typewriter effect
+  const [isTyping, setIsTyping] = useState(false);
   const [showNotFound, setShowNotFound] = useState(false);
 
   // Visual state to prevent re-renders on every keystroke
@@ -145,9 +147,32 @@ export default function TomRiddleDiary() {
     }
   };
 
+  // Typewriter effect
+  useEffect(() => {
+    if (message && message.length > 0) {
+      setDisplayedText('');
+      setIsTyping(true);
+      let currentIndex = 0;
+
+      const typeInterval = setInterval(() => {
+        if (currentIndex < message.length) {
+          setDisplayedText(message.substring(0, currentIndex + 1));
+          currentIndex++;
+        } else {
+          clearInterval(typeInterval);
+          setIsTyping(false);
+        }
+      }, 50); // 50ms per character = smooth typing speed
+
+      return () => clearInterval(typeInterval);
+    }
+  }, [message]);
+
   const reset = () => {
     setCode('');
     setMessage('');
+    setDisplayedText('');
+    setIsTyping(false);
     setShowNotFound(false);
   };
 
@@ -438,7 +463,7 @@ export default function TomRiddleDiary() {
 
                   {message && (
                     <div className="w-full h-full flex flex-col items-center justify-center space-y-12">
-                      <div className="w-full animate-ink-reveal">
+                      <div className="w-full">
                         <p
                           className="text-gray-900 text-2xl leading-loose mb-16"
                           style={{
@@ -447,15 +472,18 @@ export default function TomRiddleDiary() {
                             whiteSpace: 'pre-line'
                           }}
                         >
-                          {message}
+                          {displayedText}
+                          {isTyping && <span className="animate-pulse">|</span>}
                         </p>
                       </div>
-                      <button
-                        onClick={reset}
-                        className="text-gray-600 font-serif text-base hover:text-gray-900 transition-colors italic opacity-70 hover:opacity-100"
-                      >
-                        Написати ще...
-                      </button>
+                      {!isTyping && (
+                        <button
+                          onClick={reset}
+                          className="text-gray-600 font-serif text-base hover:text-gray-900 transition-colors italic opacity-70 hover:opacity-100"
+                        >
+                          Написати ще...
+                        </button>
+                      )}
                     </div>
                   )}
 
