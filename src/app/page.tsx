@@ -121,6 +121,12 @@ export default function TomRiddleDiary() {
   const messages: Record<string, string> = {
     'плейсхолдер': 'Твоя магія сильніша ніж ти думаєш. Продовжуй вірити.',
     "TEST": "Твоя магія сильніша ніж ти думаєш. Продовжуй вірити.",
+    "плакса міртл": `Ти впевнена що готова? Що твій час настав?
+    Спробуй пізніше...
+    Можливо ввечері...
+    Можливо завтра...
+    
+    Я не можу відповісти на це зараз.`
   };
 
   const handleSubmit = (e?: React.FormEvent<HTMLFormElement> | React.MouseEvent | React.KeyboardEvent<HTMLInputElement>) => {
