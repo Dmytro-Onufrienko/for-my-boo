@@ -494,10 +494,10 @@ export default function TomRiddleDiary() {
                   )}
 
                   {message && (
-                    <div className="w-full h-full flex flex-col items-center justify-center space-y-12">
-                      <div className="w-full">
+                    <div className="w-full h-full flex flex-col items-center justify-between py-8">
+                      <div className="w-full flex-1 flex items-center justify-center">
                         <p
-                          className="text-gray-900 text-2xl leading-loose mb-16"
+                          className="text-gray-900 text-2xl leading-loose"
                           style={{
                             fontFamily: 'var(--font-caveat), cursive',
                             color: '#1a1a2e',
@@ -508,46 +508,33 @@ export default function TomRiddleDiary() {
                           {isTyping && <span className="animate-pulse">|</span>}
                         </p>
                       </div>
-                      {!isTyping && (
-                        <button
-                          onClick={reset}
-                          className="text-gray-600 font-serif text-base hover:text-gray-900 transition-colors italic opacity-70 hover:opacity-100"
-                        >
-                          Написати ще...
-                        </button>
-                      )}
+                      <button
+                        onClick={reset}
+                        className={`text-gray-600 font-serif text-base hover:text-gray-900 transition-all duration-500 italic ${isTyping ? 'opacity-0 pointer-events-none' : 'opacity-70 hover:opacity-100'}`}
+                      >
+                        Написати ще...
+                      </button>
                     </div>
                   )}
 
                   {showNotFound && (
-                    <div className="w-full h-full flex flex-col items-center justify-center space-y-12">
-                      <div className="w-full flex flex-col justify-center animate-ink-reveal">
-                        {/* Default response text */}
+                    <div className="w-full h-full flex flex-col items-center justify-between py-8">
+                      <div className="w-full flex-1 flex items-center justify-center">
                         <p
-                          className="text-gray-800 text-3xl leading-loose italic mb-10"
+                          className="text-gray-800 text-2xl leading-loose italic"
                           style={{
                             fontFamily: 'var(--font-caveat), cursive',
-                            color: '#2d2d3a'
+                            color: '#2d2d3a',
+                            whiteSpace: 'pre-line'
                           }}
                         >
-                          Я не можу відповісти на це зараз.
-                        </p>
-                        <p
-                          className="text-gray-700 text-2xl leading-loose italic opacity-80"
-                          style={{
-                            fontFamily: 'var(--font-caveat), cursive'
-                          }}
-                        >
-                          Спробуй пізніше...<br />
-                          Можливо ввечері...<br />
-                          Можливо завтра...<br />
-                          <br />
-                          І тоді отримаєш бажану відповідь.
+                          {notFoundText}
+                          {isTyping && <span className="animate-pulse">|</span>}
                         </p>
                       </div>
                       <button
                         onClick={reset}
-                        className="text-gray-600 font-serif text-base hover:text-gray-900 transition-colors italic opacity-70 hover:opacity-100"
+                        className={`text-gray-600 font-serif text-base hover:text-gray-900 transition-all duration-500 italic ${isTyping ? 'opacity-0 pointer-events-none' : 'opacity-70 hover:opacity-100'}`}
                       >
                         Спробувати знову...
                       </button>
