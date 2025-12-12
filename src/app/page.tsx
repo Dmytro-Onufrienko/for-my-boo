@@ -131,7 +131,7 @@ export default function TomRiddleDiary() {
 
   const handleSubmit = (e?: React.FormEvent<HTMLFormElement> | React.MouseEvent | React.KeyboardEvent<HTMLInputElement>) => {
     e?.preventDefault();
-    const foundMessage = messages[code.toUpperCase()];
+    const foundMessage = messages[code.toLowerCase()];
 
     if (foundMessage) {
       setShowNotFound(false);
