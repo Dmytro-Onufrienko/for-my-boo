@@ -121,10 +121,13 @@ export default function TomRiddleDiary() {
   const messages: Record<string, string> = {
     'плейсхолдер': 'Твоя магія сильніша ніж ти думаєш. Продовжуй вірити.',
     "TEST": "Твоя магія сильніша ніж ти думаєш. Продовжуй вірити.",
-    "плакса міртл": `Ти впевнена що готова? Що твій час настав?
-      Спробуй пізніше...
-      Можливо ввечері...
-      Можливо завтра...
+    "плакса міртл": `
+    Ти впевнена що готова?
+    Що твій час настав?
+
+    Спробуй пізніше...
+    Можливо ввечері...
+    Можливо завтра...
     
     Я не можу відповісти на це зараз.`
   };
@@ -440,7 +443,8 @@ export default function TomRiddleDiary() {
                           className="text-gray-900 text-2xl leading-loose mb-16"
                           style={{
                             fontFamily: 'var(--font-caveat), cursive',
-                            color: '#1a1a2e'
+                            color: '#1a1a2e',
+                            whiteSpace: 'pre-line'
                           }}
                         >
                           {message}
@@ -502,7 +506,7 @@ export default function TomRiddleDiary() {
           to { opacity: 1; }
         }
         .animate-fade-in {
-          animation: fade-in 0.8s ease-out;
+          animation: fade-in 2s ease-out;
         }
         @keyframes ink-reveal {
           0% {
@@ -515,7 +519,7 @@ export default function TomRiddleDiary() {
           }
         }
         .animate-ink-reveal {
-          animation: ink-reveal 6s ease-in-out forwards;
+          animation: ink-reveal 7s ease-in-out forwards;
         }
         .perspective-1000 {
           perspective: 1000px;
