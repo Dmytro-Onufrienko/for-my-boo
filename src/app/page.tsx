@@ -32,6 +32,7 @@ export default function TomRiddleDiary() {
   const [code, setCode] = useState('');
   const [message, setMessage] = useState('');
   const [displayedText, setDisplayedText] = useState(''); // For typewriter effect
+  const [notFoundText, setNotFoundText] = useState(''); // For notFound typewriter
   const [isTyping, setIsTyping] = useState(false);
   const [showNotFound, setShowNotFound] = useState(false);
 
@@ -130,6 +131,7 @@ export default function TomRiddleDiary() {
     Спробуй пізніше...
     Можливо ввечері...
     Можливо завтра...
+    колись...
     
     Я не можу відповісти на це зараз.`
   };
@@ -147,7 +149,7 @@ export default function TomRiddleDiary() {
     }
   };
 
-  // Typewriter effect
+  // Typewriter effect for message
   useEffect(() => {
     if (message && message.length > 0) {
       setDisplayedText('');
@@ -162,16 +164,46 @@ export default function TomRiddleDiary() {
           clearInterval(typeInterval);
           setIsTyping(false);
         }
-      }, 50); // 50ms per character = smooth typing speed
+      }, 50);
 
       return () => clearInterval(typeInterval);
     }
   }, [message]);
 
+  // Typewriter effect for notFound
+  const notFoundMessage = `Я не можу відповісти на це зараз.
+
+Спробуй пізніше...
+Можливо ввечері...
+Можливо завтра...
+
+І тоді отримаєш бажану відповідь.`;
+
+  useEffect(() => {
+    if (showNotFound) {
+      setNotFoundText('');
+      setIsTyping(true);
+      let currentIndex = 0;
+
+      const typeInterval = setInterval(() => {
+        if (currentIndex < notFoundMessage.length) {
+          setNotFoundText(notFoundMessage.substring(0, currentIndex + 1));
+          currentIndex++;
+        } else {
+          clearInterval(typeInterval);
+          setIsTyping(false);
+        }
+      }, 50);
+
+      return () => clearInterval(typeInterval);
+    }
+  }, [showNotFound]);
+
   const reset = () => {
     setCode('');
     setMessage('');
     setDisplayedText('');
+    setNotFoundText('');
     setIsTyping(false);
     setShowNotFound(false);
   };
