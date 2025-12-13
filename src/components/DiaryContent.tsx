@@ -130,12 +130,33 @@ export default function DiaryContent() {
                     </div>
                 ))}
 
-                {/* Loading Indicator */}
+                {/* Loading Indicator - Ink Blot (Refined) */}
                 {isLoading && (
-                    <div className="w-full flex justify-center py-4">
-                        <div className="animate-pulse text-gray-500 font-serif italic">...</div>
+                    <div className="w-full flex justify-center py-6">
+                        <div className="relative w-8 h-8 flex items-center justify-center">
+                            {/* Inner core */}
+                            <div className="absolute w-2 h-2 bg-black rounded-full opacity-80" style={{
+                                filter: 'blur(1px)'
+                            }}></div>
+
+                            {/* Spreading ink */}
+                            <div className="absolute inset-0 bg-gray-900 rounded-full animate-ink-spread opacity-0" style={{
+                                borderRadius: '50% 60% 40% 70% / 60% 50% 70% 40%',
+                                filter: 'blur(3px)'
+                            }}></div>
+                        </div>
                     </div>
                 )}
+
+                <style jsx>{`
+                    @keyframes ink-spread {
+                        0% { transform: scale(0.5); opacity: 0.8; }
+                        100% { transform: scale(2.5); opacity: 0; }
+                    }
+                    .animate-ink-spread {
+                        animation: ink-spread 3s infinite cubic-bezier(0.4, 0, 0.2, 1);
+                    }
+                `}</style>
 
                 {/* Active Typewriter Response */}
                 {isTyping && (
